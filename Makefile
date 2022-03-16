@@ -1,7 +1,6 @@
 # Copyright (c) 2022 Red Hat, Inc.
 # Copyright Contributors to the Open Cluster Management project
 
-PWD := $(shell pwd)
 export PATH := $(PWD)/bin:$(PATH)
 export GOBIN := $(PWD)/bin
 

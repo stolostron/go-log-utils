@@ -44,7 +44,8 @@ func (fc *FlagConfig) Bind(fs *flag.FlagSet) {
 
 // GetConfig returns a Zap configuration based off of the "production" configuration from zap.
 // It will have the level and encoder specified in the command flags, and it will use ISO-8601
-// timestamps. Note that it is configured with sampling, so it could drop some logs.
+// timestamps. Note that it is configured with sampling, so it could drop some logs. See
+// https://github.com/uber-go/zap/blob/master/FAQ.md#why-sample-application-logs
 func (fc *FlagConfig) GetConfig() zap.Config {
 	cfg := zap.NewProductionConfig()
 	cfg.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder

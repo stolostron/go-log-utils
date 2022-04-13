@@ -65,13 +65,11 @@ func (fc *FlagConfig) GetConfig() zap.Config {
 }
 
 // BuildForCtrl returns a zap.Logger built to work well with the controller-runtime.
+// Note: using the controller-runtime logger directly will not record the correct
+// filename/line - instead, call `WithName` or `WithValues` in your function, and
+// use the resulting logger.
 func (fc *FlagConfig) BuildForCtrl() (*zap.Logger, error) {
-	logger, err := fc.GetConfig().Build()
-	if err != nil {
-		return logger, err
-	}
-
-	return logger.WithOptions(zap.AddCallerSkip(1)), nil
+	return fc.GetConfig().Build()
 }
 
 // BuildForKlog returns a zap.Logger built from given config, made to work well with klog. The

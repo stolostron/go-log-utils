@@ -10,8 +10,9 @@ adjusted and expanded if there are any additional preferences on specific projec
 The `go-log-utils` repository is part of the `open-cluster-management` community. For more
 information, visit: [open-cluster-management.io](https://open-cluster-management.io).
 
-Usual setup to be configurable via command-line, and send klog messages (from other packages your
-project might use) in the same format:
+This example setup allows for command-line configuration, easy setup of the controller-runtime
+logger, and will make klog messages (from other packages your project might use) appear in the same
+format as your zap logs:
 
 	import (
 		"flag"
@@ -26,6 +27,7 @@ project might use) in the same format:
 	func main() {
 		zflags := zaputil.NewFlagConfig()
 		zflags.Bind(flag.CommandLine)
+		klog.InitFlags(flag.CommandLine)
 
 		// ... define your custom flags here...
 
@@ -37,16 +39,20 @@ project might use) in the same format:
 		}
 
 		ctrl.SetLogger(zapr.NewLogger(ctrlZap))
+		setupLog := ctrl.Log.WithName("setup")
 
 		klogZap, err := zaputil.BuildForKlog(zflags.GetConfig(), flag.CommandLine)
 		if err != nil {
-			panic(fmt.Sprintf("Failed to build zap logger for klog: %v", err))
+			setupLog.Error(err, "Failed to build zap logger for klog, those logs will not go through zap")
+		} else {
+			klog.SetLogger(zapr.NewLogger(klogZap).WithName("klog"))
 		}
 
-		klog.SetLogger(zapr.NewLogger(klogZap).WithName("klog"))
-
-		// ...
+		// ... the rest of your main function ...
 	}
 
+Note: for consistent log annotations with the filename, line number, and function name, call the
+`WithName` or `WithValues` method in your function - do not just use a global variable for the
+logger directly, or the "caller" value will be off by one.
 */
 package zaputil

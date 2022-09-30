@@ -33,3 +33,26 @@ jobs:
       run: |
         make fmt
         git diff --exit-code
+
+    - name: Run gosec
+      run: |
+        make gosec-scan
+        cat gosec.json
+
+    - name: Store the GitHub triggering event for the sonarcloud workflow
+      if: |
+        github.repository_owner == 'stolostron'
+      run: |
+        cat <<EOF > event.json
+        ${{ toJSON(github.event) }}
+        EOF
+
+    - name: Upload artifacts for the sonarcloud workflow
+      if: |
+        github.repository_owner == 'stolostron'
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifacts
+        path: |
+          event.json
+          gosec.json

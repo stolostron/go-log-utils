@@ -33,3 +33,16 @@ $(GOLANGCI_LINT):
 .PHONY: lint
 lint: $(GOLANGCI_LINT)
 	$(GOLANGCI_LINT) run
+
+############################################################
+# test section
+############################################################
+GOSEC = $(GOBIN)/gosec
+
+.PHONY: gosec
+gosec:
+	go install github.com/securego/gosec/v2/cmd/gosec@v2.9.6
+
+.PHONY: gosec-scan
+gosec-scan: gosec
+	$(GOSEC) -fmt sonarqube -out gosec.json -no-fail -exclude-dir=.go ./...

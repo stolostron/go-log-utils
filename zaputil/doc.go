@@ -2,7 +2,6 @@
 // Copyright Contributors to the Open Cluster Management project
 
 /*
-
 Package zaputil provides some helpful functions for consistently setting up a zap logger, allowing
 for command-line configuration and some preferences we've developed. It is built to be easily
 adjusted and expanded if there are any additional preferences on specific projects.

@@ -4,6 +4,7 @@ service:
 run:
   # timeout for analysis, e.g. 30s, 5m, default is 1m
   deadline: 5m
+  go: '1.17'
   timeout: 5m
 
   # Which dirs to skip: issues from them won't be reported.
@@ -33,7 +34,10 @@ linters:
     - depguard
     - dupl
     - funlen
+    - exhaustruct
     - exhaustivestruct
+    - forcetypeassert
+    - gci # disable until it's more configurable
     - gochecknoglobals
     - gochecknoinits
     - gocognit
@@ -41,18 +45,24 @@ linters:
     - gocyclo
     - godot
     - goerr113
+    - golint # replaced by revive
     - gomnd
     - gomoddirectives
     - gosec
     - ifshort
     - interfacer
+    - ireturn # New linter to consider
     - maligned
+    - maintidx # New linter to consider
     - nakedret
     - nestif
+    - nilnil # New linter to consider
+    - nonamedreturns # New linter to consider
     - paralleltest
     - prealloc
     - scopelint
     - testpackage
+    - varnamelen # New linter to consider
     - wrapcheck
   fast: false
 
@@ -65,8 +75,6 @@ linters-settings:
     # report about assignment of errors to blank identifier: `num, _ := strconv.Atoi(numStr)`;
     # default is false: such cases aren't reported by default.
     check-blank: false
-  gci:
-    local-prefixes: github.com/stolostron/go-log-utils
   govet:
     # report about shadowed variables
     check-shadowing: false
@@ -193,7 +201,6 @@ issues:
         - golint
         - revive
         - stylecheck
-      source: \. "github\.com/onsi/(gomega|ginkgo)"
     # Allow printing in the tests.
     - path: _test\.go$|^test/
       linters:

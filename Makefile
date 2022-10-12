@@ -4,20 +4,24 @@
 export PATH := $(PWD)/bin:$(PATH)
 export GOBIN := $(PWD)/bin
 
+# go-get-tool will 'go install' any package $1 and install it to LOCAL_BIN.
+define go-get-tool
+@set -e ;\
+echo "Checking installation of $(1)" ;\
+GOBIN=$(GOBIN) go install $(1)
+endef
+
 ############################################################
 # format section
 ############################################################
 
-GCI ?= $(GOBIN)/gci
-$(GCI):
-	go install github.com/daixiang0/gci@v0.2.9
-
-GOFUMPT ?= $(GOBIN)/gofumpt
-$(GOFUMPT):
-	go install mvdan.cc/gofumpt@v0.2.0
+.PHONY: fmt-dependencies
+fmt-dependencies:
+	$(call go-get-tool,github.com/daixiang0/gci@v0.2.9)
+	$(call go-get-tool,mvdan.cc/gofumpt@v0.2.0)
 
 .PHONY: fmt
-fmt: $(GCI) $(GOFUMPT)
+fmt: fmt-dependencies
 	find . -not \( -path "./.go" -prune \) -name "*.go" | xargs gofmt -s -w
 	find . -not \( -path "./.go" -prune \) -name "*.go" | xargs gci -w -local "$(shell cat go.mod | head -1 | cut -d " " -f 2)"
 	find . -not \( -path "./.go" -prune \) -name "*.go" | xargs gofumpt -l -w
@@ -26,12 +30,13 @@ fmt: $(GCI) $(GOFUMPT)
 # lint section
 ############################################################
 
-GOLANGCI_LINT ?= $(GOBIN)/golangci-lint
-$(GOLANGCI_LINT):
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.41.1
+.PHONY: lint-dependencies
+lint-dependencies:
+	$(call go-get-tool,github.com/golangci/golangci-lint/cmd/golangci-lint@v1.46.2)
 
+GOLANGCI_LINT ?= $(GOBIN)/golangci-lint
 .PHONY: lint
-lint: $(GOLANGCI_LINT)
+lint: lint-dependencies
 	$(GOLANGCI_LINT) run
 
 ############################################################
@@ -41,7 +46,7 @@ GOSEC = $(GOBIN)/gosec
 
 .PHONY: gosec
 gosec:
-	go install github.com/securego/gosec/v2/cmd/gosec@v2.9.6
+	$(call go-get-tool,github.com/securego/gosec/v2/cmd/gosec@v2.9.6)
 
 .PHONY: gosec-scan
 gosec-scan: gosec

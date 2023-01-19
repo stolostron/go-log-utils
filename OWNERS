@@ -1,5 +1,4 @@
 approvers:
-- ChunxiAlexLuo
 - ckandag
 - dhaiducek
 - gparvin
@@ -7,9 +6,8 @@ approvers:
 - ycao56
 - JustinKuli
 - mprahl
-
+- yiraeChristineKim
 reviewers:
-- ChunxiAlexLuo
 - ckandag
 - dhaiducek
 - gparvin
@@ -17,3 +15,4 @@ reviewers:
 - ycao56
 - JustinKuli
 - mprahl
+- yiraeChristineKim

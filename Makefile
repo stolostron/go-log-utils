@@ -46,7 +46,7 @@ GOSEC = $(GOBIN)/gosec
 
 .PHONY: gosec
 gosec:
-	$(call go-get-tool,github.com/securego/gosec/v2/cmd/gosec@v2.15.0)
+	$(call go-get-tool,github.com/securego/gosec/v2/cmd/gosec@v2.21.2)
 
 .PHONY: gosec-scan
 gosec-scan: gosec

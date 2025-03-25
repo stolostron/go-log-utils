@@ -4,6 +4,7 @@
 package zaputil
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"strconv"
@@ -83,7 +84,7 @@ func BuildForKlog(cfg zap.Config, klogFlagSet *flag.FlagSet) (*zap.Logger, error
 
 	klogV := klogFlagSet.Lookup("v")
 	if klogV == nil {
-		return nil, fmt.Errorf("no 'v' flag found in given FlagSet")
+		return nil, errors.New("no 'v' flag found in given FlagSet")
 	}
 
 	klogLevel, err := strconv.Atoi(klogV.Value.String())

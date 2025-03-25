@@ -4,6 +4,16 @@
 export PATH := $(PWD)/bin:$(PATH)
 export GOBIN := $(PWD)/bin
 
+## CLI versions (with links to the latest releases)
+# https://github.com/golangci/golangci-lint/releases/latest
+GOLANGCI_VERSION := v1.64.8
+# https://github.com/mvdan/gofumpt/releases/latest
+GOFUMPT_VERSION := v0.7.0
+# https://github.com/daixiang0/gci/releases/latest
+GCI_VERSION := v0.13.5
+# https://github.com/securego/gosec/releases/latest
+GOSEC_VERSION := v2.22.2
+
 # go-get-tool will 'go install' any package $1 and install it to LOCAL_BIN.
 define go-get-tool
 @set -e ;\
@@ -17,8 +27,8 @@ endef
 
 .PHONY: fmt-dependencies
 fmt-dependencies:
-	$(call go-get-tool,github.com/daixiang0/gci@v0.10.1)
-	$(call go-get-tool,mvdan.cc/gofumpt@v0.5.0)
+	$(call go-get-tool,github.com/daixiang0/gci@$(GCI_VERSION))
+	$(call go-get-tool,mvdan.cc/gofumpt@$(GOFUMPT_VERSION))
 
 .PHONY: fmt
 fmt: fmt-dependencies
@@ -32,7 +42,7 @@ fmt: fmt-dependencies
 
 .PHONY: lint-dependencies
 lint-dependencies:
-	$(call go-get-tool,github.com/golangci/golangci-lint/cmd/golangci-lint@v1.52.2)
+	$(call go-get-tool,github.com/golangci/golangci-lint/cmd/golangci-lint@$(GOLANGCI_VERSION))
 
 GOLANGCI_LINT ?= $(GOBIN)/golangci-lint
 .PHONY: lint
@@ -46,7 +56,7 @@ GOSEC = $(GOBIN)/gosec
 
 .PHONY: gosec
 gosec:
-	$(call go-get-tool,github.com/securego/gosec/v2/cmd/gosec@v2.21.2)
+	$(call go-get-tool,github.com/securego/gosec/v2/cmd/gosec@$(GOSEC_VERSION))
 
 .PHONY: gosec-scan
 gosec-scan: gosec

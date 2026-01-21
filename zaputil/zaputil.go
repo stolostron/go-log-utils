@@ -77,11 +77,6 @@ func (fc *FlagConfig) BuildForCtrl() (*zap.Logger, error) {
 // FlagSet should be the same one klog is bound to. Usually the given config should be created
 // from `FlagConfig.GetConfig()`.
 func BuildForKlog(cfg zap.Config, klogFlagSet *flag.FlagSet) (*zap.Logger, error) {
-	if cfg.Encoding == "console" {
-		// klog already adds a newline, so have zap skip adding another in console mode
-		cfg.EncoderConfig.SkipLineEnding = true
-	}
-
 	klogV := klogFlagSet.Lookup("v")
 	if klogV == nil {
 		return nil, errors.New("no 'v' flag found in given FlagSet")
